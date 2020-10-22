@@ -128,7 +128,7 @@ class RPLSplit(DPT.DPObject):
 				channelNumbers.append(i)
 				channelIndexes.append(chxIndex)
 
-		if kwargs['byChannel']: 
+		if kwargs.get('byChannel',0):
 			for ind, idx in enumerate(channelIndexes):
 				data = np.array(segment.analogsignals[index].load(time_slice = None, channel_indexes = [idx]))
 				print('Processing channel {:03d}'.format(channelNumbers[ind]))
