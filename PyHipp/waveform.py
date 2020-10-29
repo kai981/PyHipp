@@ -64,7 +64,21 @@ class Waveform(DPT.DPObject):
             DPT.DPObject.create(self, *args, **kwargs)
         else:
             # create empty object if data is empty
-            DPT.DPObject.create(self, dirs=[], *args, **kwargs)            
+            DPT.DPObject.create(self, dirs=[], *args, **kwargs)   
+            
+        # extract array name form pwd variable 
+        aname = DPT.levels.normpath(os.path.dirname(pwd))
+        
+        # create a dict to keep track of which items in self.data list belong to that array
+        self.array_dict = dict()
+        self.array_dict[aname] = 0
+
+        # to keep track of no. of data set 
+        self.numSets = 1
+        # to keep track of whether channel or array plot type was chosen
+        self.current_plot_type = None
+
+        
         
     def append(self, wf):
         # this function will be called by processDirs to append the values of certain fields
@@ -72,6 +86,13 @@ class Waveform(DPT.DPObject):
         # It is useful to store the information of the objects for panning through in the future
         DPT.DPObject.append(self, wf)  # append self.setidx and self.dirs
         self.data = self.data + wf.data
+        
+        # to keep track of the last index in self.data that corresponds to each array
+        #(assume channels will be added by array order)
+        for ar in wf.array_dict:
+            self.array_dict[ar] = self.numSets
+        self.numSets += 1
+
         
     def plot(self, i = None, ax = None, getNumEvents = False, getLevels = False,\
              getPlotOpts = False, overlay = False, **kwargs):
