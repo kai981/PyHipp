@@ -691,12 +691,12 @@ class Eyelink(DPT.DPObject):
 
 
         ax.clear()
-        figure = ax.get_figure()
-        figure.clf()
-        for other_ax in ax.figure.axes:
-            other_ax.remove()
+        # figure = ax.get_figure()
+        # figure.clf()
+        # for other_ax in ax.figure.axes:
+        #     other_ax.remove()
 
-        ax = figure.add_subplot(111)
+        # ax = figure.add_subplot(111)
 
         if plot_type == 'XT':
             if self.dirs[0].endswith('eye'):
