@@ -144,15 +144,23 @@ class Waveform(DPT.DPObject):
                 elif plot_type == 'Array':
                     return len(self.array_dict), i
             elif self.current_plot_type == 'Array' and plot_type == 'Channel':
-                # return number of channels and the appropriate
+                # return number of channels (numSets) and the appropriate
                 # channel number if the current array number is i
-                self.current_plot_type = 'Channel'
-                return self.numSets, i
+                if i == 0:
+                    return self.numSets, 0
+                else:
+					# get values in array_dict
+                    advals = np.array([*self.array_dict.values()])
+                    # advals[i-1]+1 is the first channel of the current array 
+                    return self.numSets, advals[i-1]+1 
+                
             elif self.current_plot_type == 'Channel' and plot_type == 'Array':  
                 # return number of arrays and the appropriate
                 # array number if the current channel number is i
-                self.current_plot_type = 'Array' 
-                return len(self.array_dict), i
+                advals = np.array([*self.array_dict.values()])
+				# find index that is larger than i
+                vi = (advals >= i).nonzero()
+                return len(self.array_dict), vi[0][0]
                 
         if ax is None:
             ax = plt.gca()
@@ -166,9 +174,9 @@ class Waveform(DPT.DPObject):
         fig = ax.figure  # get the parent figure of the ax
         
         if plot_type == 'Channel':  # plot in channel level
-            #if self.current_plot_type == 'Array':
-            self.remove_subplots(fig)
-            #ax = fig.add_subplot(1,1,1)
+            if self.current_plot_type == 'Array':
+                self.remove_subplots(fig)
+                ax = fig.add_subplot(1,1,1)
 
             # calling function plot_data    
             self.plot_data(i, ax, plotOpts, 1)
@@ -202,7 +210,7 @@ class Waveform(DPT.DPObject):
                 currch += 1
                 
             self.current_plot_type = 'Array'
-    
+
     
     
     def plot_data(self, i, ax, plotOpts, isCorner):
