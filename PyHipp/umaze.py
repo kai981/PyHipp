@@ -43,8 +43,9 @@ class Umaze(DPT.DPObject):
             gpEdges = np.arange(0, (gridBins+1))
             horGridBound = np.arange(-oGS2, oGS2+gridSize, gridSize)
             vertGridBound = horGridBound
-            ret = stats.binned_statistic_2d(unityData[:, 2], unityData[:, 3], np.zeros(
-                (np.shape(unityData[:, 2]))), bins=(horGridBound, vertGridBound), expand_binnumbers=True)
+            ret = stats.binned_statistic_2d(unityData[:, 2], unityData[:, 3], 
+                np.zeros((np.shape(unityData[:, 2]))), statistic='count', 
+                bins=(horGridBound, vertGridBound), expand_binnumbers=True)
             binH = ret.binnumber[0]
             binV = ret.binnumber[1]
             gridPosition = binH + ((binV - 1) * GridSteps)
@@ -83,7 +84,7 @@ class Umaze(DPT.DPObject):
                     temp_0 = []
                     temp_1 = []
                     for i in gpc[0][:]:
-                        temp_0.append(unityTrialTime[i+1, a])
+                        temp_0.append(unityTrialTime[i+2, a])
                         temp_1.append(tgp[i+1])
                     temp_0 += tstart
                     temp_0 = np.array(temp_0)

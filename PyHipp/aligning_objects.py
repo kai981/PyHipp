@@ -231,7 +231,7 @@ def aligning_objects():
     uf.unityData[0][:,1] = new_deltas
     
     for col in range(np.shape(uf.unityTrialTime[0])[1]):    
-        arr = uf.unityTime[0][uf.unityTriggers[0][col][1]-1 : uf.unityTriggers[0][col][2]]
+        arr = uf.unityTime[0][uf.unityTriggers[0][col][1]+1 : uf.unityTriggers[0][col][2]]
         arr = arr - arr[0]
         a = np.empty(np.shape(uf.unityTrialTime[0])[0])
         a[:] = np.nan
